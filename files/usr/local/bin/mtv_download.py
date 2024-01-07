@@ -18,6 +18,7 @@ import os
 import subprocess
 import shlex
 from subprocess import DEVNULL,STDOUT
+import requests
 from multiprocessing.pool import ThreadPool
 
 # --- eigene Imports   ------------------------------------------------------
@@ -45,6 +46,20 @@ def download_film(options,film):
   else:
     cmd = options.config["CMD_DOWNLOADS"]
     isM3U = False
+
+    # make sure we always get best quality, options.config["QUALITAET"] will be ignored
+    size,urlHD = film.get_url("HD")
+    sizeHD = requests.get(urlHD, stream=True).headers['Content-length']
+    
+    size,urlSD = film.get_url("SD")
+    sizeSD = requests.get(urlSD, stream=True).headers['Content-length']
+    
+    if int(sizeSD) > int(sizeHD):
+      size = sizeSD
+      url = urlSD
+    else:
+      size = sizeHD
+      url = urlHD
 
   ziel = options.config["ZIEL_DOWNLOADS"].format(ext=ext, **film.asDict())
   cmd = cmd.format(ziel=ziel,url=url)
