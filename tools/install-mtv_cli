@@ -34,6 +34,7 @@ if [ -n "$PACKAGES" ] && check_packages $PACKAGES; then
 fi
 
 pip3 show pick | grep -q Version || pip3 install pick
+pip3 show requests | grep -q Version || pip3 install requests
 
 # --- install specific files   ----------------------------------------------
 
