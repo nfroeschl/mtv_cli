@@ -1,0 +1,9 @@
+services:
+    mtv_cli:
+        ports:
+            - 8026:8026
+        volumes:
+            - /media/downboads:/downloads
+            - /opt/container_volumes/mtv_cli/data:/data
+        restart: always
+        image: mtv_cli:latest
